@@ -3,7 +3,7 @@ import {
   Search, MapPin, Briefcase, X, Plus, CreditCard, Phone, 
   DollarSign, ShieldCheck, Car, ShoppingBag, Grid, ChevronRight, 
   Home, GraduationCap, Wrench, Calendar, Key, Users, 
-  Heart, Map, Moon, Sun, ArrowRight
+  Heart, Map, Moon, Sun, ArrowRight, Menu
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { translations } from './translations';
@@ -32,6 +32,7 @@ const App = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -104,38 +105,40 @@ const App = () => {
     <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#09090B] text-slate-900 dark:text-zinc-100 font-sans selection:bg-indigo-500/30 transition-colors duration-500">
       
       {/* 1. Ultra-clean Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-40 bg-white/80 dark:bg-[#09090B]/80 backdrop-blur-2xl border-b border-slate-200/50 dark:border-zinc-800/50 transition-all duration-300">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-[#09090B]/80 backdrop-blur-2xl border-b border-slate-200/50 dark:border-zinc-800/50 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
           <div className="flex items-center justify-between py-3 gap-4 min-h-[5rem]">
             
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-2.5 cursor-pointer">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} onClick={() => { setActiveView('freelance'); window.scrollTo({top:0, behavior:'smooth'}); }} className="flex items-center gap-2.5 cursor-pointer">
               <div className="bg-black dark:bg-white text-white dark:text-black p-2 rounded-xl flex items-center justify-center">
                 <Grid size={18} strokeWidth={2.5} />
               </div>
               <span className="text-xl font-bold tracking-tight">{t('appTitle')}</span>
             </motion.div>
 
-            <div className="hidden lg:flex flex-wrap items-center gap-2 flex-1 justify-center px-4">
+            {/* Desktop Categories (Only for very large screens) */}
+            <div className="hidden 2xl:flex items-center gap-1 overflow-x-auto no-scrollbar max-w-[50%]">
               {CATEGORIES.map((item) => {
                 const isActive = activeView === item.id;
                 return (
                   <button 
                     key={item.id} onClick={() => { setActiveView(item.id); setSearchQuery(''); window.scrollTo({top:0, behavior:'smooth'}); }}
-                    className={`relative flex items-center shrink-0 gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${isActive ? 'text-black dark:text-white' : 'text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200 hover:bg-slate-100 dark:hover:bg-zinc-800/50'}`}
+                    className={`relative flex items-center shrink-0 gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ${isActive ? 'text-black dark:text-white' : 'text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200 hover:bg-slate-100 dark:hover:bg-zinc-800/50'}`}
                   >
                     {isActive && <motion.div layoutId="nav-bubble" className="absolute inset-0 bg-slate-100 dark:bg-zinc-800 rounded-full" transition={{ type: "spring", bounce: 0.15, duration: 0.5 }} />}
-                    <span className="relative z-10 flex items-center gap-2">{t('tabs')[item.id]}</span>
+                    <span className="relative z-10">{t('tabs')[item.id]}</span>
                   </button>
                 );
               })}
             </div>
 
             <div className="flex items-center gap-2 md:gap-4 shrink-0">
-              <div className="flex bg-slate-100 dark:bg-zinc-900 p-1 rounded-full items-center border border-slate-200/50 dark:border-zinc-800/50">
+              <div className="hidden md:flex bg-slate-100 dark:bg-zinc-900 p-1 rounded-full items-center border border-slate-200/50 dark:border-zinc-800/50">
                  {['uz','ru','en'].map(l => (
                    <button key={l} onClick={() => setLang(l)} className={`px-3 py-1 text-xs font-semibold rounded-full uppercase transition-all duration-300 ${lang === l ? 'bg-white dark:bg-zinc-800 shadow-sm text-black dark:text-white' : 'text-slate-500 dark:text-zinc-500'}`}>{l}</button>
                  ))}
               </div>
+              
               <button onClick={() => setIsDark(!isDark)} className="p-2 sm:p-2.5 text-slate-600 dark:text-zinc-400 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded-full transition-colors">
                 {isDark ? <Sun size={18} strokeWidth={2.5} /> : <Moon size={18} strokeWidth={2.5} />}
               </button>
@@ -146,35 +149,69 @@ const App = () => {
               >
                 <Plus size={18} strokeWidth={2.5} /> <span>{t('postAd')}</span>
               </motion.button>
-              <button onClick={() => setShowAddForm(true)} className="sm:hidden bg-black dark:bg-white text-white dark:text-black p-2 rounded-full"><Plus size={18} strokeWidth={2.5}/></button>
+
+              <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="2xl:hidden p-2 text-slate-600 dark:text-zinc-400 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded-full transition-colors">
+                {isMenuOpen ? <X size={24} strokeWidth={2.5} /> : <Menu size={24} strokeWidth={2.5} />}
+              </button>
             </div>
           </div>
-          
-          {/* Mobile Categories Scroller */}
-          <div className="flex lg:hidden overflow-x-auto no-scrollbar gap-2 pb-3 pt-1 border-t border-slate-100 dark:border-zinc-800/50">
-             {CATEGORIES.map((item) => {
-                const isActive = activeView === item.id;
-                return (
-                  <button key={item.id} onClick={() => { setActiveView(item.id); setSearchQuery(''); window.scrollTo({top:0, behavior:'smooth'}); }} className={`shrink-0 px-4 py-1.5 rounded-full text-xs font-medium transition-colors border ${isActive ? 'bg-black dark:bg-white text-white dark:text-black border-transparent' : 'bg-transparent text-slate-600 dark:text-zinc-400 border-slate-200 dark:border-zinc-800'}`}>
-                    {t('tabs')[item.id]}
-                  </button>
-                );
-              })}
-          </div>
         </div>
+
+        {/* Mobile Categoriy Slide-out */}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div 
+              initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed inset-0 top-[5rem] z-50 2xl:hidden bg-white dark:bg-[#09090B] flex flex-col"
+            >
+              <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                <div className="grid grid-cols-2 gap-3">
+                  {CATEGORIES.map((item) => {
+                    const isActive = activeView === item.id;
+                    const Icon = item.icon;
+                    return (
+                      <button 
+                        key={item.id} 
+                        onClick={() => { setActiveView(item.id); setSearchQuery(''); setIsMenuOpen(false); window.scrollTo({top:0, behavior:'smooth'}); }}
+                        className={`flex flex-col items-center gap-3 p-4 rounded-3xl border transition-all duration-300 ${isActive ? 'bg-black dark:bg-white border-transparent text-white dark:text-black' : 'bg-slate-50 dark:bg-zinc-900 border-slate-100 dark:border-zinc-800 text-slate-600 dark:text-zinc-400'}`}
+                      >
+                        <Icon size={20} />
+                        <span className="text-xs font-bold uppercase tracking-tight">{t('tabs')[item.id]}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+                
+                <div className="space-y-4 pt-6 border-t border-slate-100 dark:border-zinc-800">
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest px-1">{t('language') || 'Language'}</p>
+                  <div className="flex bg-slate-100 dark:bg-zinc-900 p-1 rounded-2xl items-center border border-slate-200/50 dark:border-zinc-800/50">
+                    {['uz','ru','en'].map(l => (
+                      <button key={l} onClick={() => setLang(l)} className={`flex-1 py-3 text-sm font-bold rounded-xl uppercase transition-all duration-300 ${lang === l ? 'bg-white dark:bg-zinc-800 shadow-sm text-black dark:text-white' : 'text-slate-500 dark:text-zinc-500'}`}>{l}</button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="p-6 pb-12 border-t border-slate-100 dark:border-zinc-800">
+                <button onClick={() => { setShowAddForm(true); setIsMenuOpen(false); }} className="w-full bg-black dark:bg-white text-white dark:text-black py-4 rounded-2xl font-bold text-base flex items-center justify-center gap-2">
+                  <Plus size={20} strokeWidth={2.5} /> {t('postAd')}
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* 2. Sleek Search Area */}
-      <div className="pt-32 sm:pt-36 pb-8 px-4 max-w-7xl mx-auto">
-        <motion.div initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="max-w-2xl mx-auto text-center space-y-6">
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
-            Nimani qidiryapsiz?
+      <div className="pt-28 sm:pt-36 pb-8 px-4 max-w-7xl mx-auto">
+        <motion.div initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="max-w-3xl mx-auto text-center space-y-4 sm:space-y-8">
+          <h1 className="text-3xl sm:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
+            {lang === 'uz' ? 'Hammasi bir joyda' : lang === 'ru' ? 'Все в одном' : 'All in one'}
           </h1>
-          <div className="relative group mx-auto w-full max-w-xl">
+          <div className="relative group mx-auto w-full max-w-2xl">
             <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-zinc-500" size={20} strokeWidth={2.5} />
             <input 
-              type="text" placeholder={`${t('tabs')[activeView]} ${t('search')}`}
-              className="w-full bg-white dark:bg-zinc-900/50 border border-slate-200 dark:border-zinc-800 rounded-full py-4 pl-14 pr-6 focus:ring-2 focus:ring-black dark:focus:ring-white focus:border-transparent dark:text-white font-medium text-base sm:text-lg shadow-sm outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-zinc-500"
+              type="text" placeholder={`${lang === 'uz' ? 'Qidiruv...' : lang === 'ru' ? 'Поиск...' : 'Search...'}`}
+              className="w-full bg-white dark:bg-zinc-900/50 border-2 border-slate-100 dark:border-zinc-800 rounded-3xl py-4 sm:py-6 pl-14 pr-6 focus:ring-4 focus:ring-black/5 dark:focus:ring-white/5 focus:border-black dark:focus:border-white dark:text-white font-medium text-base sm:text-xl shadow-sm outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-zinc-500"
               value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
@@ -195,12 +232,12 @@ const App = () => {
           <motion.div 
             key={activeView + searchQuery} // re-trigger waterfall on view change or search
             variants={containerVariants} initial="hidden" animate="show" exit="exit" 
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+            className="grid grid-cols-1 sm:grid-cols-2 laptop:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
           >
             {currentList.length > 0 ? currentList.map(item => (
               <motion.div 
                 variants={itemVariants} key={item.id} onClick={() => setSelectedItem(item)}
-                className="group flex flex-col bg-white dark:bg-zinc-900/40 rounded-3xl border border-slate-200/60 dark:border-zinc-800/60 overflow-hidden cursor-pointer hover:border-slate-300 dark:hover:border-zinc-700 hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-black/40 transition-all duration-300"
+                className="group flex flex-col bg-white dark:bg-zinc-900/40 rounded-[2.5rem] border border-slate-200/60 dark:border-zinc-800/60 overflow-hidden cursor-pointer hover:border-slate-300 dark:hover:border-zinc-700 hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-black/40 transition-all duration-300"
               >
                 <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 dark:bg-zinc-800">
                   <img src={item.image} className="absolute inset-0 w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-500 ease-out bg-white dark:bg-zinc-800/50" alt="" loading="lazy"/>
