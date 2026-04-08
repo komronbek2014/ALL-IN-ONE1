@@ -21,6 +21,7 @@ export const translations = {
     footerDesc: "O'zbekistondagi eng zamonaviy ko'p tarmoqli platforma. Hammasi bir joyda!",
     footerSections: "Bo'limlar",
     footerHelp: "Yordam",
+    language: "Tilni tanlang",
     tabs: {
       freelance: "Frilans", cars: "Mashinalar", houses: "Uylar", 
       products: "Mahsulotlar", courses: "Kurslar", services: "Xizmatlar",
@@ -50,6 +51,7 @@ export const translations = {
     footerDesc: "Самая современная многопрофильная платформа Узбекистана. Всё в одном месте!",
     footerSections: "Разделы",
     footerHelp: "Помощь",
+    language: "Выберите язык",
     tabs: {
       freelance: "Фриланс", cars: "Автомобили", houses: "Недвижимость", 
       products: "Товары", courses: "Курсы", services: "Услуги",
@@ -79,6 +81,7 @@ export const translations = {
     footerDesc: "The most modern multi-functional platform in Uzbekistan. All in one place!",
     footerSections: "Categories",
     footerHelp: "Help",
+    language: "Select language",
     tabs: {
       freelance: "Freelance", cars: "Cars", houses: "Real Estate", 
       products: "Products", courses: "Courses", services: "Services",
