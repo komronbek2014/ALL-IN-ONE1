@@ -71,7 +71,11 @@ export const getMockData = (lang) => {
         id: `${type}-${i}`,
         type: type,
         name: count > sourceArr.length ? `${item.name} #${i + 1}` : item.name,
+<<<<<<< HEAD
         image: `https://picsum.photos/seed/${type}-unique-${i}/800/600`,
+=======
+        image: item.image,
+>>>>>>> 2ce70764afe1c5e48bf238a0f5283273661927ff
         title: details.title,
         category: category, 
         price: details.price + (i % 7) * (details.price / 10),

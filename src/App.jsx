@@ -150,13 +150,18 @@ const App = () => {
                 <Plus size={18} strokeWidth={2.5} /> <span>{t('postAd')}</span>
               </motion.button>
 
+<<<<<<< HEAD
               <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="2xl:hidden p-2 text-slate-600 dark:text-zinc-400 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded-full transition-colors order-first md:order-none mr-2 md:mr-0">
+=======
+              <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="2xl:hidden p-2 text-slate-600 dark:text-zinc-400 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded-full transition-colors">
+>>>>>>> 2ce70764afe1c5e48bf238a0f5283273661927ff
                 {isMenuOpen ? <X size={24} strokeWidth={2.5} /> : <Menu size={24} strokeWidth={2.5} />}
               </button>
             </div>
           </div>
         </div>
 
+<<<<<<< HEAD
         {/* New Mobile Side-Drawer */}
         <AnimatePresence>
           {isMenuOpen && (
@@ -230,6 +235,48 @@ const App = () => {
                 </div>
               </motion.div>
             </>
+=======
+        {/* Mobile Categoriy Slide-out */}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div 
+              initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed inset-0 top-[5rem] z-50 2xl:hidden bg-white dark:bg-[#09090B] flex flex-col"
+            >
+              <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                <div className="grid grid-cols-2 gap-3">
+                  {CATEGORIES.map((item) => {
+                    const isActive = activeView === item.id;
+                    const Icon = item.icon;
+                    return (
+                      <button 
+                        key={item.id} 
+                        onClick={() => { setActiveView(item.id); setSearchQuery(''); setIsMenuOpen(false); window.scrollTo({top:0, behavior:'smooth'}); }}
+                        className={`flex flex-col items-center gap-3 p-4 rounded-3xl border transition-all duration-300 ${isActive ? 'bg-black dark:bg-white border-transparent text-white dark:text-black' : 'bg-slate-50 dark:bg-zinc-900 border-slate-100 dark:border-zinc-800 text-slate-600 dark:text-zinc-400'}`}
+                      >
+                        <Icon size={20} />
+                        <span className="text-xs font-bold uppercase tracking-tight">{t('tabs')[item.id]}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+                
+                <div className="space-y-4 pt-6 border-t border-slate-100 dark:border-zinc-800">
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest px-1">{t('language') || 'Language'}</p>
+                  <div className="flex bg-slate-100 dark:bg-zinc-900 p-1 rounded-2xl items-center border border-slate-200/50 dark:border-zinc-800/50">
+                    {['uz','ru','en'].map(l => (
+                      <button key={l} onClick={() => setLang(l)} className={`flex-1 py-3 text-sm font-bold rounded-xl uppercase transition-all duration-300 ${lang === l ? 'bg-white dark:bg-zinc-800 shadow-sm text-black dark:text-white' : 'text-slate-500 dark:text-zinc-500'}`}>{l}</button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="p-6 pb-12 border-t border-slate-100 dark:border-zinc-800">
+                <button onClick={() => { setShowAddForm(true); setIsMenuOpen(false); }} className="w-full bg-black dark:bg-white text-white dark:text-black py-4 rounded-2xl font-bold text-base flex items-center justify-center gap-2">
+                  <Plus size={20} strokeWidth={2.5} /> {t('postAd')}
+                </button>
+              </div>
+            </motion.div>
+>>>>>>> 2ce70764afe1c5e48bf238a0f5283273661927ff
           )}
         </AnimatePresence>
       </nav>
